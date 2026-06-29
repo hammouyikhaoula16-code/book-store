@@ -1,9 +1,145 @@
-import React from 'react'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import EmailIcon from '@mui/icons-material/Email';
+import LockIcon from '@mui/icons-material/Lock';
+import PersonIcon from '@mui/icons-material/Person';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 function CreateAcc() {
   return (
-    <div>createAcc</div>
-  )
+    <div className="min-h-[calc(100vh-64px)] w-full flex flex-col md:flex-row bg-slate-950 text-white">
+
+
+      <div
+        className="w-full md:w-1/2 flex flex-col justify-between p-8 md:p-12 bg-cover bg-center relative min-h-[300px] md:min-h-0"
+        style={{
+          backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.3), rgba(15, 23, 42, 0.85)), url("https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200&auto=format&fit=crop")`
+        }}
+      >
+        <div className="flex items-center space-x-2">
+          <span className="text-xl font-extrabold tracking-wider bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">
+            BOOKS
+          </span>
+        </div>
+
+        <div className="space-y-3 z-10">
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+            Welcome!
+          </h1>
+          <p className="text-sm text-slate-300 max-w-sm">
+            Create an account to be a part of our community to read and download all your favorite books.
+          </p>
+        </div>
+      </div>
+
+
+      <div className="w-full md:w-1/2 flex items-center justify-center p-8 sm:p-12 bg-slate-950">
+        <div className="w-full max-w-md space-y-6">
+
+          <div className="space-y-1">
+            <h2 className="text-2xl font-bold tracking-tight">Register</h2>
+            <p className="text-xs text-slate-400">Please enter your information below to get started.</p>
+          </div>
+
+          <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">First Name</label>
+                <div className="relative">
+                  <PersonIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" sx={{ fontSize: 18 }} />
+                  <input
+                    type="text"
+                    placeholder="XXXX"
+                    className="w-full pl-12 pr-4 py-3 bg-slate-900 border border-slate-800 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 rounded-2xl text-sm text-white focus:outline-none transition-all placeholder-slate-600"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Last Name</label>
+                <div className="relative">
+                  <PersonIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" sx={{ fontSize: 18 }} />
+                  <input
+                    type="text"
+                    placeholder="XXXX"
+                    className="w-full pl-12 pr-4 py-3 bg-slate-900 border border-slate-800 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 rounded-2xl text-sm text-white focus:outline-none transition-all placeholder-slate-600"
+                  />
+                </div>
+              </div>
+            </div>
+
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Date of Birth</label>
+              <div className="relative">
+                <CalendarMonthIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 z-10" sx={{ fontSize: 18 }} />
+                <input
+                  type="date"
+                  className="w-full pl-12 pr-4 py-3 bg-slate-900 border border-slate-800 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 rounded-2xl text-sm text-white focus:outline-none transition-all scheme-dark cursor-pointer text-slate-400 focus:text-white"
+                />
+              </div>
+            </div>
+
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Email Address</label>
+              <div className="relative">
+                <EmailIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" sx={{ fontSize: 18 }} />
+                <input
+                  type="email"
+                  placeholder="name@XXXX.XXX"
+                  className="w-full pl-12 pr-4 py-3 bg-slate-900 border border-slate-800 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 rounded-2xl text-sm text-white focus:outline-none transition-all placeholder-slate-600"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Password</label>
+              <div className="relative">
+                <LockIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" sx={{ fontSize: 18 }} />
+                <input
+                  type="password"
+                  placeholder="••••••••"
+                  className="w-full pl-12 pr-4 py-3 bg-slate-900 border border-slate-800 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 rounded-2xl text-sm text-white focus:outline-none transition-all placeholder-slate-600"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Confirm Password</label>
+              <div className="relative">
+                <LockIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" sx={{ fontSize: 18 }} />
+                <input
+                  type="password"
+                  placeholder="••••••••"
+                  className="w-full pl-12 pr-4 py-3 bg-slate-900 border border-slate-800 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 rounded-2xl text-sm text-white focus:outline-none transition-all placeholder-slate-600"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-3 mt-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-sm font-semibold rounded-2xl shadow-lg active:scale-[0.99] transition-all cursor-pointer text-white"
+            >
+              Sign Up
+            </button>
+          </form>
+
+
+          <p className="text-center text-sm text-slate-400 pt-2">
+            Already have an account?
+            <Link to="/login" className="font-semibold text-violet-400 hover:text-violet-300 transition-colors">
+              Sign In here
+            </Link>
+          </p>
+
+        </div>
+      </div>
+
+    </div>
+  );
 }
 
-export default CreateAcc
+export default CreateAcc;

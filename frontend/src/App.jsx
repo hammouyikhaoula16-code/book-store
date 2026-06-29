@@ -3,14 +3,32 @@ import axios from 'axios';
 import NavBar from './component/NavBar';
 import Home from './pages/Home';
 import FootBar from './component/FootBar';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Outlet,
+} from "react-router-dom";
+import Login from './pages/Login';
+import CreateAcc from './pages/CreateAcc';
 
+const Layout = ({ onSearch }) => {
+  return (
+    <div className="flex flex-col min-h-screen bg-slate-950">
+      <NavBar onSearch={onSearch} />
+      <main className="grow">
+        <Outlet />
+      </main>
+      <FootBar />
+    </div>
+  );
+};
 
 function App() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
-  // 1. Track the current page state (Page 1 or Page 2)
   const [currentPage, setCurrentPage] = useState(1);
   const booksPerPage = 6;
+
   const fetchBooks = async (searchStr) => {
     setLoading(true);
     setCurrentPage(1);
@@ -27,7 +45,7 @@ function App() {
         pages: book.number_of_pages_median ? `${book.number_of_pages_median} pages` : 'N/A',
         coverUrl: book.cover_i
           ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
-          : 'N'
+          : 'https://via.placeholder.com/120x170?text=No+Cover' // Fixed placeholder fallback string
       }));
 
       setBooks(formattedBooks);
@@ -38,36 +56,46 @@ function App() {
     }
   };
 
-
   useEffect(() => {
     fetchBooks('harry');
   }, []);
 
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
-
-
   const currentDisplayedBooks = books.slice(indexOfFirstBook, indexOfLastBook);
-  return (
-    <div className="flex flex-col min-h-screen bg-slate-950">
 
-      <NavBar onSearch={fetchBooks} />
 
-      <main className="grow">
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout onSearch={fetchBooks} />,
+      children: [
+        {
+          path: "/",
+          element: (
+            <Home
+              books={currentDisplayedBooks}
+              loading={loading}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalBooks={books.length}
+              booksPerPage={booksPerPage}
+            />
+          ),
+        },
+        {
+          path: "/login",
+          element: <Login />,
+        },
+        {
+          path: "/register",
+          element: <CreateAcc />,
+        }
+      ]
+    }
+  ]);
 
-        <Home
-          books={currentDisplayedBooks}
-          loading={loading}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalBooks={books.length}
-          booksPerPage={booksPerPage}
-        />
-      </main>
-
-      <FootBar />
-    </div>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

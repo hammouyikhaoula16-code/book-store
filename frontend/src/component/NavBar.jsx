@@ -3,7 +3,7 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import SearchIcon from '@mui/icons-material/Search';
 import FaceIcon from '@mui/icons-material/Face';
-
+import { Link } from 'react-router-dom';
 function NavBar({ onSearch }) {
   const [darkMode, setDarkMode] = useState(true);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -18,9 +18,10 @@ function NavBar({ onSearch }) {
     <nav className="sticky top-0 z-50 flex items-center justify-between px-6 py-3 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 text-white shadow-lg">
 
       <div className="flex items-center space-x-2 cursor-pointer">
-        <span className="text-xl font-extrabold tracking-wider bg-gradient-to-r from-violet-400 to-indigo-500 bg-clip-text text-transparent">
-          BOOKS
-        </span>
+        <Link to='/'>
+          <span className="text-xl font-extrabold tracking-wider bg-gradient-to-r from-violet-400 to-indigo-500 bg-clip-text text-transparent">
+            BOOKS
+          </span></Link>
       </div>
 
       <div className="flex items-center space-x-4">
@@ -30,8 +31,8 @@ function NavBar({ onSearch }) {
             type="button"
             onClick={() => setSearchOpen(!searchOpen)}
             className={`p-2 rounded-xl transition-all duration-300 cursor-pointer ${searchOpen
-                ? 'absolute left-1 z-10 text-slate-400'
-                : 'text-slate-400 hover:text-violet-400 bg-slate-800/40 hover:bg-slate-800 border border-slate-700/30'
+              ? 'absolute left-1 z-10 text-slate-400'
+              : 'text-slate-400 hover:text-violet-400 bg-slate-800/40 hover:bg-slate-800 border border-slate-700/30'
               }`}
           >
             <SearchIcon fontSize="small" />
@@ -58,10 +59,11 @@ function NavBar({ onSearch }) {
       </div>
 
       <div className="flex items-center">
-        <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-sm font-medium rounded-xl active:scale-95 transition-all">
-          <FaceIcon fontSize="small" />
-          <span>Login</span>
-        </button>
+        <Link to="/login">
+          <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-sm font-medium rounded-xl active:scale-95 transition-all">
+            <FaceIcon fontSize="small" />
+            <span>Login</span>
+          </button></Link>
       </div>
 
     </nav>
