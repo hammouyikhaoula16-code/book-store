@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+import DownloadIcon from '@mui/icons-material/Download';
+import { Link } from 'react-router-dom';
 function Home({ books, loading, currentPage, setCurrentPage, totalBooks, booksPerPage }) {
 
 
@@ -47,6 +49,30 @@ function Home({ books, loading, currentPage, setCurrentPage, totalBooks, booksPe
                     <div className="space-y-1.5 text-slate-500 text-xs">
                       <div className="flex items-center gap-1.5"><CalendarMonthIcon sx={{ fontSize: 14 }} /><span>{book.publishYear}</span></div>
                       <div className="flex items-center gap-1.5"><MenuBookIcon sx={{ fontSize: 14 }} /><span>{book.pages}</span></div>
+                    </div>
+                    <div className=" items-center gap-3 mt-4 w-full">
+
+
+                      <Link to='/read'>
+                        <button
+                          type="button"
+                          onClick={() => console.log('Opening reader...')}
+                          className="flex-1 flex items-center justify-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-xs sm:text-sm font-semibold rounded-xl shadow-md shadow-indigo-950/20 active:scale-[0.97] transition-all cursor-pointer text-white"
+                        >
+                          <AutoStoriesIcon sx={{ fontSize: 16 }} />
+                          <span>Read</span>
+                        </button></Link>
+
+                      <button
+                        
+                        type="button"
+                        //onClick={() => console.log('Starting download...')}
+                        className=" flex-1 flex items-center justify-center space-x-2 px-4 py-2.5 bg-slate-900 border border-slate-800/80 hover:border-violet-500/50 hover:text-violet-400 text-xs sm:text-sm font-semibold rounded-xl active:scale-[0.97] transition-all cursor-pointer text-slate-300"
+                      >
+                        <DownloadIcon sx={{ fontSize: 16 }} />
+                        <span>Download</span>
+                      </button>
+
                     </div>
                   </div>
                 </div>

@@ -10,6 +10,8 @@ import {
 } from "react-router-dom";
 import Login from './pages/Login';
 import CreateAcc from './pages/CreateAcc';
+import PersonalInfo from './pages/PersonalInfo';
+
 
 const Layout = ({ onSearch }) => {
   return (
@@ -45,7 +47,7 @@ function App() {
         pages: book.number_of_pages_median ? `${book.number_of_pages_median} pages` : 'N/A',
         coverUrl: book.cover_i
           ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
-          : 'https://via.placeholder.com/120x170?text=No+Cover' // Fixed placeholder fallback string
+          : 'no cover'
       }));
 
       setBooks(formattedBooks);
@@ -90,7 +92,12 @@ function App() {
         {
           path: "/register",
           element: <CreateAcc />,
-        }
+        },
+        {
+          path: "/settings",
+          element: <PersonalInfo />,
+        },
+        
       ]
     }
   ]);
