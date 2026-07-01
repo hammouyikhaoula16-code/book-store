@@ -11,6 +11,7 @@ import {
 import Login from './pages/Login';
 import CreateAcc from './pages/CreateAcc';
 import PersonalInfo from './pages/PersonalInfo';
+import BookReader from './pages/BookReader';
 
 
 const Layout = ({ onSearch }) => {
@@ -96,6 +97,10 @@ function App() {
         {
           path: "/settings",
           element: <PersonalInfo />,
+        },
+        {
+          path: "/read",
+          element: <BookReader />,
         },
         
       ]
