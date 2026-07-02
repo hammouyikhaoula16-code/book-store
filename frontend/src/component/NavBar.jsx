@@ -6,11 +6,11 @@ import FaceIcon from '@mui/icons-material/Face';
 import { Link } from 'react-router-dom';
 import SettingsIcon from '@mui/icons-material/Settings';
 import SettingsBar from './SettingsBar';
-function NavBar({ onSearch }) {
+function NavBar({ onSearch , connected , setConnected}) {
   const [darkMode, setDarkMode] = useState(true);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
-  const [connected, setConnected] = useState(true);
+  //const [connected, setConnected] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -73,7 +73,7 @@ function NavBar({ onSearch }) {
           </button>
         </div> : <div className="flex items-center">
           <Link to="/login">
-            <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-sm font-medium rounded-xl active:scale-95 transition-all">
+            <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r cursor-pointer from-violet-600 to-indigo-600 text-sm font-medium rounded-xl active:scale-95 transition-all">
               <FaceIcon fontSize="small" />
               <span>Login</span>
             </button></Link>

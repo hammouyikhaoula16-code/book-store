@@ -6,7 +6,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Link } from 'react-router-dom';
-function Home({ books, loading, currentPage, setCurrentPage, totalBooks, booksPerPage }) {
+function Home({ books, loading, currentPage, setCurrentPage, totalBooks, booksPerPage, connected }) {
 
 
   const totalPages = Math.ceil(totalBooks / booksPerPage);
@@ -17,7 +17,7 @@ function Home({ books, loading, currentPage, setCurrentPage, totalBooks, booksPe
 
         <div className="text-center space-y-2">
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">
-            Discover Your Next Read
+           {connected ? "Welcome back! What are we reading today?" : "Sign in to unlock and read books"}
           </h1>
         </div>
 
@@ -55,19 +55,34 @@ function Home({ books, loading, currentPage, setCurrentPage, totalBooks, booksPe
 
                       <Link to='/read'>
                         <button
+                          disabled={!connected}
                           type="button"
-                          onClick={() => console.log('Opening reader...')}
-                          className="flex-1 flex items-center justify-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-xs sm:text-sm font-semibold rounded-xl shadow-md shadow-indigo-950/20 active:scale-[0.97] transition-all cursor-pointer text-white"
+                          onClick={() => console.log(connected)}
+                          className="flex-1 flex items-center justify-center space-x-2 px-4 py-2.5 
+    bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-md transition-all
+    
+  
+    enabled:hover:from-violet-500 enabled:hover:to-indigo-500 
+    enabled:active:scale-[0.97] enabled:cursor-pointer
+    
+  
+    disabled:opacity-40 disabled:from-slate-800 disabled:to-slate-900 disabled:cursor-not-allowed disabled:shadow-none"
                         >
-                          <AutoStoriesIcon sx={{ fontSize: 16 }} />
-                          <span>Read</span>
+                          <span>Read </span>
                         </button></Link>
 
                       <button
-                        
+                        disabled={!connected}
                         type="button"
-                        //onClick={() => console.log('Starting download...')}
-                        className=" flex-1 flex items-center justify-center space-x-2 px-4 py-2.5 bg-slate-900 border border-slate-800/80 hover:border-violet-500/50 hover:text-violet-400 text-xs sm:text-sm font-semibold rounded-xl active:scale-[0.97] transition-all cursor-pointer text-slate-300"
+                        onClick={() => console.log('Starting download...')}
+                        className="flex-1 flex items-center justify-center space-x-2 px-4 py-2.5 bg-slate-900 border border-slate-800/80 text-xs sm:text-sm font-semibold rounded-xl transition-all text-slate-300
+    
+  
+    enabled:hover:border-violet-500/50 enabled:hover:text-violet-400 
+    enabled:cursor-pointer enabled:active:scale-[0.97]
+    
+    
+    disabled:opacity-40 disabled:bg-slate-950 disabled:border-slate-900 disabled:text-slate-600 disabled:cursor-not-allowed"
                       >
                         <DownloadIcon sx={{ fontSize: 16 }} />
                         <span>Download</span>

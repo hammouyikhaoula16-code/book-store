@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
 
-function Login() {
+function Login({ connected, setConnected }) {
   return (
     <div className="min-h-[calc(100vh-64px)] w-full flex flex-col md:flex-row bg-slate-950 text-white">
 
@@ -71,12 +71,15 @@ function Login() {
               </div>
             </div>
 
-            <button
-              type="submit"
-              className="w-full py-3 mt-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-sm font-semibold rounded-2xl shadow-lg active:scale-[0.99] transition-all cursor-pointer text-white"
-            >
-              Sign In
-            </button>
+            <Link to='/'>
+
+              <button
+                onClick={() => (setConnected(true))}
+                type="submit"
+                className="w-full py-3 mt-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-sm font-semibold rounded-2xl shadow-lg active:scale-[0.99] transition-all cursor-pointer text-white"
+              >
+                Sign In
+              </button></Link>
           </form>
 
 

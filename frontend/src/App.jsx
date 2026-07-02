@@ -14,10 +14,10 @@ import PersonalInfo from './pages/PersonalInfo';
 import BookReader from './pages/BookReader';
 
 
-const Layout = ({ onSearch }) => {
+const Layout = ({ onSearch, connected, setConnected }) => {
   return (
     <div className="flex flex-col min-h-screen bg-slate-950">
-      <NavBar onSearch={onSearch} />
+      <NavBar onSearch={onSearch} connected={connected} setConnected={setConnected} />
       <main className="grow">
         <Outlet />
       </main>
@@ -31,7 +31,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const booksPerPage = 6;
-
+  const [connected, setConnected] = useState(false);
   const fetchBooks = async (searchStr) => {
     setLoading(true);
     setCurrentPage(1);
@@ -71,7 +71,7 @@ function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Layout onSearch={fetchBooks} />,
+      element: <Layout onSearch={fetchBooks} connected={connected} setConnected={setConnected} />,
       children: [
         {
           path: "/",
@@ -83,12 +83,14 @@ function App() {
               setCurrentPage={setCurrentPage}
               totalBooks={books.length}
               booksPerPage={booksPerPage}
+              connected={connected} 
+              setConnected={setConnected}
             />
           ),
         },
         {
           path: "/login",
-          element: <Login />,
+          element: <Login connected={connected} setConnected={setConnected} />,
         },
         {
           path: "/register",
@@ -96,13 +98,13 @@ function App() {
         },
         {
           path: "/settings",
-          element: <PersonalInfo />,
+          element: <PersonalInfo connected={connected} setConnected={setConnected} />,
         },
         {
           path: "/read",
           element: <BookReader />,
         },
-        
+
       ]
     }
   ]);
