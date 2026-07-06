@@ -14,24 +14,49 @@ import PersonalInfo from './pages/PersonalInfo';
 import BookReader from './pages/BookReader';
 
 
-const Layout = ({ onSearch, connected, setConnected }) => {
+const Layout = ({ onSearch, connected, setConnected, darkMode, toggleDarkMode }) => {
   return (
-    <div className="flex flex-col min-h-screen bg-slate-950">
-      <NavBar onSearch={onSearch} connected={connected} setConnected={setConnected} />
+   
+    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-950 dark:text-slate-50 transition-colors duration-300">
+      <NavBar 
+        onSearch={onSearch} 
+        connected={connected} 
+        setConnected={setConnected} 
+        darkMode={darkMode} 
+        toggleDarkMode={toggleDarkMode} 
+      />
+      
       <main className="grow">
         <Outlet />
       </main>
+      
       <FootBar />
     </div>
   );
 };
-
 function App() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const booksPerPage = 6;
   const [connected, setConnected] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem('theme') === 'dark';
+  });
+
+
+  useEffect(() => {
+    const root = window.document.documentElement;
+    if (darkMode) {
+      root.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      root.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [darkMode]);
+
+  const toggleDarkMode = () => setDarkMode(prev => !prev);
   const fetchBooks = async (searchStr) => {
     setLoading(true);
     setCurrentPage(1);
@@ -71,7 +96,7 @@ function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Layout onSearch={fetchBooks} connected={connected} setConnected={setConnected} />,
+      element: <Layout onSearch={fetchBooks} connected={connected} setConnected={setConnected} darkMode={darkMode} toggleDarkMode={toggleDarkMode}/>,
       children: [
         {
           path: "/",

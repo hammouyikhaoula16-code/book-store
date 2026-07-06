@@ -5,8 +5,7 @@ import LockIcon from '@mui/icons-material/Lock';
 
 function Login({ connected, setConnected }) {
   return (
-    <div className="min-h-[calc(100vh-64px)] w-full flex flex-col md:flex-row bg-slate-950 text-white">
-
+    <div className="min-h-[calc(100vh-64px)] w-full flex flex-col md:flex-row bg-white dark:bg-slate-950 text-slate-800 dark:text-white transition-colors duration-300">
 
       <div
         className="w-full md:w-1/2 flex flex-col justify-between p-8 md:p-12 bg-cover bg-center relative min-h-[300px] md:min-h-0"
@@ -20,7 +19,7 @@ function Login({ connected, setConnected }) {
           </span>
         </div>
 
-        <div className="space-y-3 z-10">
+        <div className="space-y-3 z-10 text-white">
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
             Welcome back!
           </h1>
@@ -30,62 +29,59 @@ function Login({ connected, setConnected }) {
         </div>
       </div>
 
-
-      <div className="w-full md:w-1/2 flex items-center justify-center p-8 sm:p-12 bg-slate-950">
+      <div className="w-full md:w-1/2 flex items-center justify-center p-8 sm:p-12 bg-white dark:bg-slate-950 transition-colors duration-300">
         <div className="w-full max-w-md space-y-8">
 
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold tracking-tight">Sign In</h2>
-            <p className="text-xs text-slate-400">Please enter your account details below.</p>
+            <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Sign In</h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Please enter your account details below.</p>
           </div>
 
           <form onSubmit={(e) => e.preventDefault()} className="space-y-5">
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Email Address</label>
+              <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Email Address</label>
               <div className="relative">
-                <EmailIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" sx={{ fontSize: 18 }} />
+                <EmailIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" sx={{ fontSize: 18 }} />
                 <input
                   type="email"
                   placeholder="name@xxxxx.xxx"
-                  className="w-full pl-12 pr-4 py-3 bg-slate-900 border border-slate-800 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 rounded-2xl text-sm text-white focus:outline-none transition-all placeholder-slate-600"
+                  className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 rounded-2xl text-sm text-slate-800 dark:text-white focus:outline-none transition-all placeholder-slate-400 dark:placeholder-slate-600"
                 />
               </div>
             </div>
 
-
             <div className="space-y-1.5">
               <div className="flex justify-between items-center">
-                <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Password</label>
-                <a href="#" className="text-xs font-medium text-violet-400 hover:text-violet-300 transition-colors">
+                <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Password</label>
+                <a href="#" className="text-xs font-medium text-violet-600 dark:text-violet-400 hover:text-violet-500 dark:hover:text-violet-300 transition-colors">
                   Forgot password?
                 </a>
               </div>
               <div className="relative">
-                <LockIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" sx={{ fontSize: 18 }} />
+                <LockIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" sx={{ fontSize: 18 }} />
                 <input
                   type="password"
                   placeholder="••••••••"
-                  className="w-full pl-12 pr-4 py-3 bg-slate-900 border border-slate-800 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 rounded-2xl text-sm text-white focus:outline-none transition-all placeholder-slate-600"
+                  className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 rounded-2xl text-sm text-slate-800 dark:text-white focus:outline-none transition-all placeholder-slate-400 dark:placeholder-slate-600"
                 />
               </div>
             </div>
 
-            <Link to='/'>
-
+            <Link to='/' className="block">
               <button
-                onClick={() => (setConnected(true))}
+                onClick={() => setConnected(true)}
                 type="submit"
-                className="w-full py-3 mt-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-sm font-semibold rounded-2xl shadow-lg active:scale-[0.99] transition-all cursor-pointer text-white"
+                className="w-full py-3 mt-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-sm font-semibold rounded-2xl shadow-md dark:shadow-lg active:scale-[0.99] transition-all cursor-pointer text-white"
               >
                 Sign In
-              </button></Link>
+              </button>
+            </Link>
           </form>
 
-
-          <p className="text-center text-sm text-slate-400">
-            Don't have an account yet?
-            <Link to="/register" className="font-semibold text-violet-400 hover:text-violet-300 transition-colors">
+          <p className="text-center text-sm text-slate-500 dark:text-slate-400">
+            Don't have an account yet?{' '}
+            <Link to="/register" className="font-semibold text-violet-600 dark:text-violet-400 hover:text-violet-500 dark:hover:text-violet-300 transition-colors">
               Please join us
             </Link>
           </p>
