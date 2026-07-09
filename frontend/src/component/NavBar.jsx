@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import SearchIcon from '@mui/icons-material/Search';
@@ -6,8 +7,9 @@ import FaceIcon from '@mui/icons-material/Face';
 import { Link } from 'react-router-dom';
 import SettingsIcon from '@mui/icons-material/Settings';
 import SettingsBar from './SettingsBar';
-
-function NavBar({ onSearch, connected, setConnected, darkMode, toggleDarkMode }) {
+import FavoriteIcon from '@mui/icons-material/Favorite'; 
+function NavBar({ onSearch, darkMode, toggleDarkMode }) {
+  const { connected, logout } = useAuth();
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -34,7 +36,15 @@ function NavBar({ onSearch, connected, setConnected, darkMode, toggleDarkMode })
      
         <div className="flex items-center space-x-4">
 
-       
+       {connected && (
+            <Link 
+              to="/favorites" 
+              className="p-2 text-slate-500 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400 bg-slate-100 dark:bg-slate-800/40 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700/30 rounded-xl transition-all duration-300 flex items-center gap-1 text-xs font-semibold shadow-sm"
+            >
+              <FavoriteIcon fontSize="small" className="text-red-500 animate-pulse" />
+              <span className="hidden sm:inline">My Favorites</span>
+            </Link>
+          )}
           <form onSubmit={handleSubmit} className="relative flex items-center">
             <button
               type="button"

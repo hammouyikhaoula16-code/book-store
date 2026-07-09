@@ -1,9 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
+
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
 
-function Login({ connected, setConnected }) {
+function Login() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    
+   
+    if (!email || !password) {
+      setError('Please fill in all credentials fields.');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/login', {
+        email,
+        password
+      });
+      
+      const { token, user } = response.data;
+      
+      login(token, user);
+      navigate('/');
+    } catch (err) {
+      setError(err.response?.data?.error || 'Invalid credentials.');
+    }
+  };
+
   return (
     <div className="min-h-[calc(100vh-64px)] w-full flex flex-col md:flex-row bg-white dark:bg-slate-950 text-slate-800 dark:text-white transition-colors duration-300">
 
@@ -37,7 +72,13 @@ function Login({ connected, setConnected }) {
             <p className="text-xs text-slate-500 dark:text-slate-400">Please enter your account details below.</p>
           </div>
 
-          <form onSubmit={(e) => e.preventDefault()} className="space-y-5">
+          {error && (
+            <div className="p-3 text-xs font-semibold text-red-600 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 rounded-xl animate-fade-in">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-5">
 
             <div className="space-y-1.5">
               <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Email Address</label>
@@ -45,8 +86,11 @@ function Login({ connected, setConnected }) {
                 <EmailIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" sx={{ fontSize: 18 }} />
                 <input
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@xxxxx.xxx"
                   className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 rounded-2xl text-sm text-slate-800 dark:text-white focus:outline-none transition-all placeholder-slate-400 dark:placeholder-slate-600"
+                  required
                 />
               </div>
             </div>
@@ -62,21 +106,21 @@ function Login({ connected, setConnected }) {
                 <LockIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" sx={{ fontSize: 18 }} />
                 <input
                   type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 rounded-2xl text-sm text-slate-800 dark:text-white focus:outline-none transition-all placeholder-slate-400 dark:placeholder-slate-600"
+                  required
                 />
               </div>
             </div>
 
-            <Link to='/' className="block">
-              <button
-                onClick={() => setConnected(true)}
-                type="submit"
-                className="w-full py-3 mt-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-sm font-semibold rounded-2xl shadow-md dark:shadow-lg active:scale-[0.99] transition-all cursor-pointer text-white"
-              >
-                Sign In
-              </button>
-            </Link>
+            <button
+              type="submit"
+              className="w-full py-3 mt-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-sm font-semibold rounded-2xl shadow-md dark:shadow-lg active:scale-[0.99] transition-all cursor-pointer text-white"
+            >
+              Sign In
+            </button>
           </form>
 
           <p className="text-center text-sm text-slate-500 dark:text-slate-400">

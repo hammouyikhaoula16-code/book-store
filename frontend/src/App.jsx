@@ -3,47 +3,36 @@ import axios from 'axios';
 import NavBar from './component/NavBar';
 import Home from './pages/Home';
 import FootBar from './component/FootBar';
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Outlet,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Login from './pages/Login';
 import CreateAcc from './pages/CreateAcc';
 import PersonalInfo from './pages/PersonalInfo';
 import BookReader from './pages/BookReader';
-
-
-const Layout = ({ onSearch, connected, setConnected, darkMode, toggleDarkMode }) => {
+import FavBooks from './pages/FavBooks';
+const Layout = ({ onSearch, darkMode, toggleDarkMode }) => {
   return (
-   
-    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-950 dark:text-slate-50 transition-colors duration-300">
+    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-950 dark:text-slate-50 transition-colors duration-300"> {/*[cite: 1] */}
       <NavBar 
         onSearch={onSearch} 
-        connected={connected} 
-        setConnected={setConnected} 
         darkMode={darkMode} 
         toggleDarkMode={toggleDarkMode} 
-      />
-      
+      /> 
       <main className="grow">
-        <Outlet />
+        <Outlet /> 
       </main>
-      
-      <FootBar />
+      <FootBar /> 
     </div>
   );
 };
+
 function App() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const booksPerPage = 6;
-  const [connected, setConnected] = useState(false);
+  const booksPerPage = 6; //[cite: 1]
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem('theme') === 'dark';
   });
-
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -57,13 +46,14 @@ function App() {
   }, [darkMode]);
 
   const toggleDarkMode = () => setDarkMode(prev => !prev);
+
   const fetchBooks = async (searchStr) => {
     setLoading(true);
     setCurrentPage(1);
     try {
       const searchTerm = searchStr.trim() ? encodeURIComponent(searchStr) : 'harry';
       const response = await axios.get(`https://openlibrary.org/search.json?q=${searchTerm}`);
-      const results = response.data.docs.slice(0, 12);
+      const results = response.data.docs.slice(0, 12); //[cite: 1]
 
       const formattedBooks = results.map(book => ({
         id: book.key,
@@ -92,11 +82,10 @@ function App() {
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
   const currentDisplayedBooks = books.slice(indexOfFirstBook, indexOfLastBook);
 
-
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Layout onSearch={fetchBooks} connected={connected} setConnected={setConnected} darkMode={darkMode} toggleDarkMode={toggleDarkMode}/>,
+      element: <Layout onSearch={fetchBooks} darkMode={darkMode} toggleDarkMode={toggleDarkMode}/>,
       children: [
         {
           path: "/",
@@ -108,14 +97,12 @@ function App() {
               setCurrentPage={setCurrentPage}
               totalBooks={books.length}
               booksPerPage={booksPerPage}
-              connected={connected} 
-              setConnected={setConnected}
             />
           ),
         },
         {
           path: "/login",
-          element: <Login connected={connected} setConnected={setConnected} />,
+          element: <Login />,
         },
         {
           path: "/register",
@@ -123,13 +110,16 @@ function App() {
         },
         {
           path: "/settings",
-          element: <PersonalInfo connected={connected} setConnected={setConnected} />,
+          element: <PersonalInfo />,
         },
         {
           path: "/read",
           element: <BookReader />,
         },
-
+        {
+          path: "/favorites", 
+          element: <FavBooks />,
+        },
       ]
     }
   ]);
