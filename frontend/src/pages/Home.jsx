@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import api from '../api';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -8,7 +8,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Link } from 'react-router-dom';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'; 
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
 function Home({ books, loading, currentPage, setCurrentPage, totalBooks, booksPerPage }) {
@@ -16,41 +16,41 @@ function Home({ books, loading, currentPage, setCurrentPage, totalBooks, booksPe
   const { connected, token } = useAuth();
   const [favBookIds, setFavBookIds] = useState([]);
 
-  
+
   useEffect(() => {
+
+    if (!connected || !token) {
+      setFavBookIds([]);
+      return;
+    }
+
     const fetchUserFavorites = async () => {
-      if (!connected || !token) return;
       try {
-        const response = await axios.get('http://localhost:5000/api/favorites', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setFavBookIds(response.data.map(item => item.book_id));
+        const response = await api.get('/favorites');
+        const favList = Array.isArray(response.data) ? response.data : (response.data.favorites || []);
+        setFavBookIds(favList.map(item => item.book_id || item.id));
       } catch (err) {
         console.error('Error matching favorite records:', err);
       }
     };
+
     fetchUserFavorites();
   }, [connected, token]);
 
- 
   const toggleFavorite = async (book) => {
     if (!connected || !token) return;
-    
+
     const isFavorited = favBookIds.includes(book.id);
     try {
       if (isFavorited) {
-        await axios.delete(`http://localhost:5000/api/favorites/${encodeURIComponent(book.id)}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await api.delete(`/favorites/${encodeURIComponent(book.id)}`);
         setFavBookIds(prev => prev.filter(id => id !== book.id));
       } else {
-        await axios.post('http://localhost:5000/api/favorites', {
+        await api.post('/favorites', {
           book_id: book.id,
           title: book.title,
           authors: book.authors,
           cover_url: book.coverUrl
-        }, {
-          headers: { Authorization: `Bearer ${token}` }
         });
         setFavBookIds(prev => [...prev, book.id]);
       }
@@ -84,16 +84,13 @@ function Home({ books, loading, currentPage, setCurrentPage, totalBooks, booksPe
                   key={book.id}
                   className="flex gap-4 p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/60 rounded-2xl shadow-sm dark:shadow-none hover:shadow-md dark:hover:border-slate-700/60 transition-all duration-300 group hover:-translate-y-1 relative"
                 >
-         
-                
                   <div className="w-24 h-36 flex-shrink-0 rounded-xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-950 bg-slate-50 dark:bg-slate-950 relative">
-                    <img 
-                      src={book.coverUrl !== 'no cover' ? book.coverUrl : 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=200'} 
-                      alt={book.title} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                    <img
+                      src={book.coverUrl !== 'no cover' ? book.coverUrl : 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=200'}
+                      alt={book.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
 
-                  
                     {connected && (
                       <button
                         type="button"
@@ -108,8 +105,6 @@ function Home({ books, loading, currentPage, setCurrentPage, totalBooks, booksPe
                       </button>
                     )}
                   </div>
-
-           
                   <div className="flex flex-col justify-between py-0.5 flex-grow min-w-0">
                     <div className="space-y-1">
                       <h3 className="font-bold text-slate-900 dark:text-slate-100 truncate group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
@@ -132,9 +127,12 @@ function Home({ books, loading, currentPage, setCurrentPage, totalBooks, booksPe
                     </div>
 
                     <div className="flex items-center gap-2 mt-3 w-full">
-            
+
                       <div className="relative group/btn flex-1 flex">
-                        <Link to={connected ? '/read' : '#'} className="w-full flex">
+                        <Link
+                          to={`/read/${book.id}`}
+                          className={`w-full flex ${!connected ? 'pointer-events-none' : ''}`}
+                        >
                           <button
                             disabled={!connected}
                             type="button"

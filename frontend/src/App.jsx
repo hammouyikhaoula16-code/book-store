@@ -9,18 +9,19 @@ import CreateAcc from './pages/CreateAcc';
 import PersonalInfo from './pages/PersonalInfo';
 import BookReader from './pages/BookReader';
 import FavBooks from './pages/FavBooks';
+
 const Layout = ({ onSearch, darkMode, toggleDarkMode }) => {
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-950 dark:text-slate-50 transition-colors duration-300"> {/*[cite: 1] */}
-      <NavBar 
-        onSearch={onSearch} 
-        darkMode={darkMode} 
-        toggleDarkMode={toggleDarkMode} 
-      /> 
+    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-950 dark:text-slate-50 transition-colors duration-300">
+      <NavBar
+        onSearch={onSearch}
+        darkMode={darkMode}
+        toggleDarkMode={toggleDarkMode}
+      />
       <main className="grow">
-        <Outlet /> 
+        <Outlet />
       </main>
-      <FootBar /> 
+      <FootBar />
     </div>
   );
 };
@@ -29,7 +30,7 @@ function App() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const booksPerPage = 6; //[cite: 1]
+  const booksPerPage = 6;
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem('theme') === 'dark';
   });
@@ -47,35 +48,42 @@ function App() {
 
   const toggleDarkMode = () => setDarkMode(prev => !prev);
 
-  const fetchBooks = async (searchStr) => {
+  const fetchBooks = async (searchStr = '') => {
     setLoading(true);
     setCurrentPage(1);
     try {
-      const searchTerm = searchStr.trim() ? encodeURIComponent(searchStr) : 'harry';
-      const response = await axios.get(`https://openlibrary.org/search.json?q=${searchTerm}`);
-      const results = response.data.docs.slice(0, 12); //[cite: 1]
+      const response = await axios.get('http://localhost:5000/api/books');
+      const dbBooks = response.data;
 
-      const formattedBooks = results.map(book => ({
-        id: book.key,
+      const formattedBooks = dbBooks.map(book => ({
+        id: book.id,
         title: book.title,
-        authors: book.author_name ? book.author_name.join(', ') : 'Unknown Author',
-        publishYear: book.first_publish_year || 'N/A',
-        pages: book.number_of_pages_median ? `${book.number_of_pages_median} pages` : 'N/A',
-        coverUrl: book.cover_i
-          ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
-          : 'no cover'
+        authors: book.authors || 'Unknown Author',
+        publishYear: book.publish_year || 'N/A',
+        pages: book.pages ? `${book.pages} pages` : 'N/A',
+        coverUrl: book.cover_url || 'no cover',
+        description: book.description || ''
       }));
 
-      setBooks(formattedBooks);
-    } catch (error) {
-      console.error("Error fetching books:", error);
+      const searchTerm = searchStr.trim().toLowerCase();
+      const filteredBooks = searchTerm
+        ? formattedBooks.filter(book =>
+          book.title.toLowerCase().includes(searchTerm) ||
+          book.authors.toLowerCase().includes(searchTerm)
+        )
+        : formattedBooks;
+
+      setBooks(filteredBooks);
+    } catch (err) {
+      console.error("Failed fetching books from database:", err);
+      setBooks([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchBooks('harry');
+    fetchBooks();
   }, []);
 
   const indexOfLastBook = currentPage * booksPerPage;
@@ -85,7 +93,7 @@ function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Layout onSearch={fetchBooks} darkMode={darkMode} toggleDarkMode={toggleDarkMode}/>,
+      element: <Layout onSearch={fetchBooks} darkMode={darkMode} toggleDarkMode={toggleDarkMode} />,
       children: [
         {
           path: "/",
@@ -113,11 +121,11 @@ function App() {
           element: <PersonalInfo />,
         },
         {
-          path: "/read",
+          path: "/read/:id",
           element: <BookReader />,
         },
         {
-          path: "/favorites", 
+          path: "/favorites",
           element: <FavBooks />,
         },
       ]

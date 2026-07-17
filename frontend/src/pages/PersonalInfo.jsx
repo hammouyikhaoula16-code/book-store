@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import LeftBar from '../component/LeftBar';
+import { useAuth } from '../context/AuthContext';
 import PersonIcon from '@mui/icons-material/Person';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import EmailIcon from '@mui/icons-material/Email';
 import EditIcon from '@mui/icons-material/Edit';
 
 function PersonalInfo() {
+  const { logout } = useAuth();
   const [activeTab, setActiveTab] = useState('personal');
-
   const renderFields = () => {
     switch (activeTab) {
       case 'personal':
@@ -23,14 +24,14 @@ function PersonalInfo() {
                   <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">First Name</label>
                   <div className="relative">
                     <PersonIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" sx={{ fontSize: 18 }} />
-                    <input type="text" placeholder="John" className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800/60 focus:border-violet-500 rounded-2xl text-sm text-slate-800 dark:text-white focus:outline-none transition-all placeholder-slate-400 dark:placeholder-slate-600" />
+                    <input type="text" placeholder="First Name" className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800/60 focus:border-violet-500 rounded-2xl text-sm text-slate-800 dark:text-white focus:outline-none transition-all placeholder-slate-400 dark:placeholder-slate-600" />
                   </div>
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Last Name</label>
                   <div className="relative">
                     <PersonIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" sx={{ fontSize: 18 }} />
-                    <input type="text" placeholder="Doe" className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800/60 focus:border-violet-500 rounded-2xl text-sm text-slate-800 dark:text-white focus:outline-none transition-all placeholder-slate-400 dark:placeholder-slate-600" />
+                    <input type="text" placeholder="Last Name" className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800/60 focus:border-violet-500 rounded-2xl text-sm text-slate-800 dark:text-white focus:outline-none transition-all placeholder-slate-400 dark:placeholder-slate-600" />
                   </div>
                 </div>
               </div>
@@ -99,17 +100,17 @@ function PersonalInfo() {
 
   return (
     <div className="max-w-6xl mx-auto p-6 sm:p-12 flex flex-col md:flex-row gap-8 text-slate-800 dark:text-white transition-colors duration-300">
-      
+
       <div className="flex-shrink-0">
-        <LeftBar 
-          activeTab={activeTab} 
-          onTabChange={setActiveTab} 
-          onLogout={() => alert("Logging out...")} 
+        <LeftBar
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          onLogout={logout}
         />
       </div>
 
-      <form 
-        onSubmit={(e) => e.preventDefault()} 
+      <form
+        onSubmit={(e) => e.preventDefault()}
         className="grow bg-white/70 dark:bg-slate-900/40 backdrop-blur-md border border-slate-200 dark:border-slate-800/80 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-xl min-h-[400px] transition-all duration-300"
       >
         {renderFields()}

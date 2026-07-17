@@ -33,7 +33,7 @@ function CreateAcc() {
     }
 
     try {
-      
+
       await axios.post('http://localhost:5000/api/auth/register', {
         first_name: formData.firstName,
         last_name: formData.lastName,
@@ -41,8 +41,8 @@ function CreateAcc() {
         email: formData.email,
         password: formData.password
       });
-      
-     
+
+
       navigate('/login');
     } catch (err) {
       setError(err.response?.data?.error || 'Registration failed. Try again.');
@@ -82,14 +82,14 @@ function CreateAcc() {
             <p className="text-xs text-slate-500 dark:text-slate-400">Please enter your information below to get started.</p>
           </div>
 
-          
+
           {error && (
             <div className="p-3 text-xs font-semibold text-red-600 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 rounded-xl">
               {error}
             </div>
           )}
 
-         
+
           <form onSubmit={handleSubmit} className="space-y-4">
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

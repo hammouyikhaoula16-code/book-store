@@ -17,8 +17,8 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
-   
+
+
     if (!email || !password) {
       setError('Please fill in all credentials fields.');
       return;
@@ -29,9 +29,9 @@ function Login() {
         email,
         password
       });
-      
+
       const { token, user } = response.data;
-      
+
       login(token, user);
       navigate('/');
     } catch (err) {
