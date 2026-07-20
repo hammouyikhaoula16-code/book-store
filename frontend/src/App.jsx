@@ -9,6 +9,7 @@ import CreateAcc from './pages/CreateAcc';
 import PersonalInfo from './pages/PersonalInfo';
 import BookReader from './pages/BookReader';
 import FavBooks from './pages/FavBooks';
+import RecoverPassword from './pages/RecoverPassword';
 
 const Layout = ({ onSearch, darkMode, toggleDarkMode }) => {
   return (
@@ -127,6 +128,10 @@ function App() {
         {
           path: "/favorites",
           element: <FavBooks />,
+        },
+        {
+          path: "/recoverpass",
+          element: <RecoverPassword />,
         },
       ]
     }

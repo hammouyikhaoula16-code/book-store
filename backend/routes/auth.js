@@ -6,7 +6,6 @@ import db from '../config/db.js';
 
 const router = express.Router();
 
-
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: parseInt(process.env.SMTP_PORT || '587'),
@@ -16,7 +15,6 @@ const transporter = nodemailer.createTransport({
     pass: process.env.SMTP_PASS,
   },
 });
-
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
@@ -73,6 +71,7 @@ const verifyCodeToken = async (email, code, purpose) => {
   return true;
 };
 
+
 router.post('/register/send-code', async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ error: 'Email is required.' });
@@ -115,6 +114,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
+
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).json({ error: 'Please enter your email and password.' });
@@ -136,6 +136,55 @@ router.post('/login', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server database error during lookup.' });
+  }
+});
+
+
+router.post('/forgot-password/send-code', async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ error: 'Please enter your email address.' });
+
+  try {
+   
+    const [users] = await db.query('SELECT id FROM users WHERE email = ?', [email]);
+    if (users.length === 0) {
+      return res.status(404).json({ error: 'No account associated with this email address.' });
+    }
+
+    await sendVerificationCode(email, 'forgot_password');
+    res.json({ message: 'Recovery code sent to your email address!' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to dispatch recovery email.' });
+  }
+});
+
+router.post('/forgot-password/reset', async (req, res) => {
+  const { email, code, newPassword } = req.body;
+
+  if (!email || !code || !newPassword) {
+    return res.status(400).json({ error: 'Email, code, and new password are required.' });
+  }
+
+  if (newPassword.length < 8) {
+    return res.status(400).json({ error: 'Password must be at least 8 characters long.' });
+  }
+
+  try {
+    const isValid = await verifyCodeToken(email, code, 'forgot_password');
+    if (!isValid) {
+      return res.status(400).json({ error: 'Invalid or expired verification code.' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    await db.query('UPDATE users SET password = ? WHERE email = ?', [hashedPassword, email]);
+
+    res.json({ message: 'Password reset successfully! You can now log in.' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error processing password reset.' });
   }
 });
 
