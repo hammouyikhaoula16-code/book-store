@@ -13,7 +13,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Helper: Send verification code via email
 export const sendVerificationCode = async (email, purpose) => {
   const code = Math.floor(100000 + Math.random() * 900000).toString();
   const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
@@ -43,7 +42,6 @@ export const sendVerificationCode = async (email, purpose) => {
   await transporter.sendMail(mailOptions);
 };
 
-// Helper: Validate code
 export const verifyCodeToken = async (email, code, purpose) => {
   const [records] = await db.query(
     'SELECT * FROM email_verifications WHERE email = ? AND code = ? AND purpose = ? AND expires_at > NOW()',
@@ -55,7 +53,6 @@ export const verifyCodeToken = async (email, code, purpose) => {
   return true;
 };
 
-// Register - Send Code
 export const registerSendCode = async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ error: 'Email is required.' });
@@ -72,7 +69,6 @@ export const registerSendCode = async (req, res) => {
   }
 };
 
-// Register - Finalize
 export const registerUser = async (req, res) => {
   const { first_name, last_name, dob, email, password, code } = req.body;
 
@@ -99,7 +95,6 @@ export const registerUser = async (req, res) => {
   }
 };
 
-// Login
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).json({ error: 'Please enter your email and password.' });
@@ -124,7 +119,6 @@ export const loginUser = async (req, res) => {
   }
 };
 
-// Forgot Password - Send Code
 export const forgotPasswordSendCode = async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ error: 'Please enter your email address.' });
@@ -143,7 +137,6 @@ export const forgotPasswordSendCode = async (req, res) => {
   }
 };
 
-// Forgot Password - Reset
 export const resetPassword = async (req, res) => {
   const { email, code, newPassword } = req.body;
 
@@ -173,7 +166,6 @@ export const resetPassword = async (req, res) => {
   }
 };
 
-// Security - Send Code
 export const securitySendCode = async (req, res) => {
   const { purpose, customEmail } = req.body;
   const targetEmail = customEmail || req.user.email;
@@ -194,7 +186,6 @@ export const securitySendCode = async (req, res) => {
   }
 };
 
-// Profile Update
 export const updateProfile = async (req, res) => {
   const { firstName, lastName } = req.body;
   if (!firstName || !lastName) return res.status(400).json({ message: 'First name and Last name are required.' });
@@ -208,7 +199,6 @@ export const updateProfile = async (req, res) => {
   }
 };
 
-// Email Update
 export const updateEmail = async (req, res) => {
   const { email, code } = req.body;
   if (!email || !code) return res.status(400).json({ message: 'New email and validation code are required.' });
@@ -229,7 +219,6 @@ export const updateEmail = async (req, res) => {
   }
 };
 
-// Password Update
 export const updatePassword = async (req, res) => {
   const { currentPassword, newPassword, code } = req.body;
   if (!currentPassword || !newPassword || !code) return res.status(400).json({ message: 'All inputs including the security code are required.' });

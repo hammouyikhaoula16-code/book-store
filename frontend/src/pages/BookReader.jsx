@@ -88,7 +88,7 @@ function BookReader() {
     setFavLoading(true);
     try {
       if (isFavorited) {
-        await api.delete(`/favorites/${id}`); // Automatic token header
+        await api.delete(`/favorites/${id}`); 
         setIsFavorited(false);
       } else {
         await api.post('/favorites', {
