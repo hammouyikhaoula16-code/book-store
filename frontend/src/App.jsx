@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from './api';
 import NavBar from './component/NavBar';
 import Home from './pages/Home';
 import FootBar from './component/FootBar';
@@ -53,7 +53,7 @@ function App() {
     setLoading(true);
     setCurrentPage(1);
     try {
-      const response = await axios.get('http://localhost:5000/api/books');
+      const response = await api.get('/books');
       const dbBooks = response.data;
 
       const formattedBooks = dbBooks.map(book => ({

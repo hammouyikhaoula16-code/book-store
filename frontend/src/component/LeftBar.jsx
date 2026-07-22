@@ -19,8 +19,7 @@ function LeftBar({ activeTab, onTabChange, onLogout }) {
   const handleLogout = (e) => {
     e.preventDefault();
     
-    localStorage.removeItem('token');
-
+    // Centralized logout handles localStorage & state cleanup
     if (typeof onLogout === 'function') {
       onLogout();
     }

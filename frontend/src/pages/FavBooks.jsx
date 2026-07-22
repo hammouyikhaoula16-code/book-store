@@ -23,7 +23,6 @@ function FavBooks() {
 
         const response = await api.get('/favorites');
 
-
         const data = Array.isArray(response.data)
           ? response.data
           : (response.data.favorites || []);
@@ -95,7 +94,7 @@ function FavBooks() {
         <div className="text-center py-16 bg-white/50 dark:bg-slate-900/40 backdrop-blur border border-slate-200 dark:border-slate-800/80 rounded-3xl">
           <p className="text-slate-500 dark:text-slate-400 text-lg mb-4">Your reading list is empty.</p>
           <Link
-            to="/home"
+            to="/"
             className="inline-flex items-center justify-center px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl transition"
           >
             Explore Library

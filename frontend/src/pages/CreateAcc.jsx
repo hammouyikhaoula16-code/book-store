@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
 import PersonIcon from '@mui/icons-material/Person';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import KeyIcon from '@mui/icons-material/Key';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 
 function CreateAcc() {
   const navigate = useNavigate();
@@ -39,7 +38,7 @@ function CreateAcc() {
 
     setLoading(true);
     try {
-      await axios.post('http://localhost:5000/api/auth/register/send-code', {
+      await api.post('/auth/register/send-code', {
         email: formData.email
       });
       
@@ -57,7 +56,7 @@ function CreateAcc() {
     setLoading(true);
 
     try {
-      await axios.post('http://localhost:5000/api/auth/register', {
+      await api.post('/auth/register', {
         first_name: formData.firstName,
         last_name: formData.lastName,
         dob: formData.dob,

@@ -9,7 +9,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import KeyIcon from '@mui/icons-material/Key';
 
 function PersonalInfo() {
-  const { logout, user, login } = useAuth();
+  const { logout, user, login, token } = useAuth();
   const [activeTab, setActiveTab] = useState('personal');
   
   const [personalForm, setPersonalForm] = useState({ firstName: '', lastName: '', dob: '' });
@@ -39,6 +39,13 @@ function PersonalInfo() {
   };
 
   const requestSecurityCode = async (purpose, customEmail = null) => {
+    if (purpose === 'change_password') {
+      if (passwordForm.newPassword.length < 8) {
+        triggerNotification('New password must be at least 8 characters long.', true);
+        return;
+      }
+    }
+
     setLoading(true);
     try {
       const res = await api.post('/auth/security/send-code', { purpose, customEmail });
@@ -60,7 +67,7 @@ function PersonalInfo() {
         lastName: personalForm.lastName
       });
       if (login && response.data.user) {
-        login(localStorage.getItem('token'), response.data.user);
+        login(token, response.data.user);
       }
       triggerNotification('Personal info updated successfully!');
     } catch (err) {
@@ -76,7 +83,7 @@ function PersonalInfo() {
     try {
       const response = await api.put('/auth/email', { email: emailForm.email, code: verificationCode });
       if (login && response.data.user) {
-        login(localStorage.getItem('token'), response.data.user);
+        login(token, response.data.user);
       }
       triggerNotification('Email address changed successfully!');
       setVerificationPurpose(null);
@@ -109,7 +116,6 @@ function PersonalInfo() {
   };
 
   const renderFields = () => {
-    
     if (verificationPurpose) {
       return (
         <div className="space-y-6 max-w-sm mx-auto text-center py-6">
@@ -220,7 +226,7 @@ function PersonalInfo() {
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Ensure account parameters use high complexity configurations.</p>
             </div>
             <input type="password" placeholder="Current Password" value={passwordForm.currentPassword} onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })} className="w-full p-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm text-slate-800 dark:text-white focus:outline-none focus:border-violet-500" />
-            <input type="password" placeholder="New Password" value={passwordForm.newPassword} onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })} className="w-full p-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm text-slate-800 dark:text-white focus:outline-none focus:border-violet-500" />
+            <input type="password" placeholder="New Password (min 8 characters)" value={passwordForm.newPassword} onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })} className="w-full p-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm text-slate-800 dark:text-white focus:outline-none focus:border-violet-500" />
             <button type="button" onClick={() => requestSecurityCode('change_password')} disabled={loading || !passwordForm.currentPassword || !passwordForm.newPassword} className="px-6 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-sm font-semibold rounded-2xl text-white shadow-md disabled:opacity-50 cursor-pointer">
               Send Verification Code
             </button>
